@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.time.Instant;
 
@@ -70,6 +71,18 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT,
                 "The request conflicts with existing database data.",
                 request);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(
+            BadCredentialsException ex,
+            HttpServletRequest request) {
+
+        return buildResponse(
+                HttpStatus.UNAUTHORIZED,
+                "Invalid email or password",
+                request
+        );
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(

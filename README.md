@@ -1,4 +1,4 @@
-# SpringBook 📚
+# SpringBook
 
 SpringBook is a personal book management Spring Boot application.
 
@@ -16,6 +16,9 @@ SpringBook is a personal book management Spring Boot application.
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
+- Spring Security
+- OAuth2 Resource Server / JWT
+- BCrypt password hashing
 - PostgreSQL
 - Flyway
 - Maven
@@ -31,9 +34,13 @@ springbook/
 ├── src/
 │   └── main/
 │       ├── java/com/springbook/
+│       │   ├── auth/
 │       │   ├── book/
 │       │   ├── reading/
 │       │   ├── user/
+│       │   ├── security/
+│       │   ├── config/
+│       │   ├── exception/
 │       │   └── SpringBookApplication.java
 │       └── resources/
 │           ├── db/migration/
@@ -53,9 +60,68 @@ Configure your database connection using the following environment variables:
 - `DB_URL` (=jdbc:postgresql://localhost:5432/springbook_db)
 - `DB_USERNAME` (=postgres)
 - `DB_PASSWORD`
+- `JWT_SECRET` (generate a 256-bit or longer random secret)
+
+To generate the JWT secret in PowerShell:
+```powershell
+  $bytes = New-Object byte[] 32
+  $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+  $rng.GetBytes($bytes)
+  $secret = [Convert]::ToBase64String($bytes)
+  $secret
+  $rng.Dispose()
+```
+_Note: JWT needs to be at least 32 bytes because it is signed with the HS256 algorithm._
 
 Compile and run the application from the root directory:
 
 ```bash
 mvn compile
 mvn spring-boot:run
+```
+
+## API Overview
+
+### Authentication
+
+| Method | Endpoint             | Description                    | Authentication |
+|--------|----------------------|--------------------------------|----------------|
+| POST   | `/api/auth/register` | Register a new user            | Public         |
+| POST   | `/api/auth/login`    | Authenticate and receive a JWT | Public         |
+
+### Books
+
+| Method | Endpoint                          | Description           | Authentication |
+|--------|-----------------------------------|-----------------------|----------------|
+| GET    | `/api/books`                      | Retrieve all books    | Required       |
+| POST   | `/api/books`                      | Create a new book     | Required       |
+| GET    | `/api/books/{id}`                 | Retrieve a book by ID | Required       |
+| GET    | `/api/books/search?title={title}` | Search books by title | Required       |
+
+### Personal Library
+
+| Method | Endpoint                       | Description                               | Authentication |
+|--------|--------------------------------|-------------------------------------------|----------------|
+| GET    | `/api/library`                 | Retrieve the authenticated user's library | Required       |
+| POST   | `/api/library`                 | Add a book to the user's library          | Required       |
+| GET    | `/api/library/status/{status}` | Filter library books by reading status    | Required       |
+
+### Authentication Header
+
+Protected endpoints require a valid JWT in the `Authorization` header:
+
+```http
+Authorization: Bearer <your-token>
+```
+
+### Reading Status Values
+
+The following values are supported:
+
+- `WANT_TO_READ`
+- `CURRENTLY_READING`
+- `READ`
+- `ON_HOLD`
+- `DROPPED`
+
+_Note: All protected endpoints require authentication; the backend identifies the current user from the JWT._
