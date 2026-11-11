@@ -106,6 +106,17 @@ mvn spring-boot:run
 | POST   | `/api/library`                 | Add a book to the user's library          | Required       |
 | GET    | `/api/library/status/{status}` | Filter library books by reading status    | Required       |
 
+### Reading Journal and Notes
+
+| Method  | Endpoint                       | Description                        | Authentication |
+|---------|--------------------------------|------------------------------------|----------------|
+| POST    | `/api/notes`                   | Create a reading note              | Required       |
+| GET     | `/api/notes/book/{userBookId}` | Retrieve notes for a library entry | Required       |
+| GET     | `/api/notes/{id}`              | Retrieve a specific note           | Required       |
+| PUT     | `/api/notes/{id}`              | Update a reading note              | Required       |
+| DELETE  | `/api/notes/{id}`              | Delete a reading note              | Required       |
+
+
 ### Authentication Header
 
 Protected endpoints require a valid JWT in the `Authorization` header:
@@ -123,5 +134,14 @@ The following values are supported:
 - `READ`
 - `ON_HOLD`
 - `DROPPED`
+
+### Note types
+
+The following values are supported:
+
+- `GENERAL`
+- `CHAPTER`
+- `QUOTE`
+- `REFLECTION`
 
 _Note: All protected endpoints require authentication; the backend identifies the current user from the JWT._
