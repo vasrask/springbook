@@ -7,6 +7,8 @@ import com.springbook.book.dto.BookRequest;
 import com.springbook.book.dto.BookResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.springbook.exception.ResourceNotFoundException;
+import com.springbook.exception.DuplicateResourceException;
 
 import java.util.List;
 
@@ -22,6 +24,14 @@ public class BookService {
 
     @Transactional
     public BookResponse createBook(BookRequest request) {
+        if (request.isbn() != null &&
+                !request.isbn().isBlank() &&
+                bookRepository.findByIsbn(request.isbn()).isPresent()) {
+
+            throw new DuplicateResourceException(
+                    "A book with ISBN " + request.isbn()
+                            + " already exists");
+        }
 
         Book book = new Book();
 
@@ -42,7 +52,7 @@ public class BookService {
 
         Book book = bookRepository.findById(id)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Book not found: " + id)
+                        new ResourceNotFoundException("Book not found: " + id)
                 );
 
         return toResponse(book);

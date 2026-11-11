@@ -12,6 +12,8 @@ import com.springbook.user.User;
 import com.springbook.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.springbook.exception.ResourceNotFoundException;
+import com.springbook.exception.DuplicateResourceException;
 
 import java.util.List;
 
@@ -41,18 +43,18 @@ public class UserBookService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("User not found")
+                        new ResourceNotFoundException("User not found")
                 );
 
         Book book = bookRepository.findById(request.bookId())
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Book not found")
+                        new ResourceNotFoundException("Book not found")
                 );
 
         if (userBookRepository.existsByUserIdAndBookId(
                 userId, request.bookId())) {
 
-            throw new IllegalStateException(
+            throw new DuplicateResourceException(
                     "This book is already in the user's library"
             );
         }
