@@ -36,6 +36,7 @@ springbook/
 │       ├── java/com/springbook/
 │       │   ├── auth/
 │       │   ├── book/
+│       │   ├── booklist/
 │       │   ├── reading/
 │       │   ├── user/
 │       │   ├── security/
@@ -116,6 +117,18 @@ mvn spring-boot:run
 | PUT     | `/api/notes/{id}`              | Update a reading note              | Required       |
 | DELETE  | `/api/notes/{id}`              | Delete a reading note              | Required       |
 
+### Booklists
+
+| Method  | Endpoint                             | Description                        | Status |
+|---------|--------------------------------------|------------------------------------|--------|
+| POST    | `/api/lists`                         | Create a collection                | 201    |
+| GET     | `/api/lists`                         | Get all your collections           | 200    |
+| GET     | `/api/lists/{id}`                    | Get a specific collection          | 200    |
+| PUT     | `/api/lists/{id}`                    | Update a collection                | 200    |
+| DELETE  | `/api/lists/{id}`                    | Delete a collection                | 204    |
+| POST    | `/api/lists/{id}/books`              | Add a book to a collection         | 201    |
+| GET     | `/api/lists/{id}/books`              | Get books in a collection          | 200    |
+| DELETE  | `/api/lists/{id}/books/{userBookId}` | Remove a book from a collection    | 204    |
 
 ### Authentication Header
 
