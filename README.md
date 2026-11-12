@@ -19,6 +19,7 @@ SpringBook is a personal book management Spring Boot application.
 - Spring Security
 - OAuth2 Resource Server / JWT
 - BCrypt password hashing
+- JUnit / Mockito / Spring MockMvc
 - PostgreSQL
 - Flyway
 - Maven
@@ -158,3 +159,16 @@ The following values are supported:
 - `REFLECTION`
 
 _Note: All protected endpoints require authentication; the backend identifies the current user from the JWT._
+
+## Testing
+
+- Service layer tests: JUnit 5 and Mockito.
+- Controller tests: Spring MockMvc.
+- Repository tests: Spring Data JPA test support.
+- Database integration tests: PostgreSQL.
+
+Run the tests:
+
+```bash
+mvn clean test
+```
