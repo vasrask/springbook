@@ -12,6 +12,8 @@ SpringBook is a personal book management Spring Boot application.
 
 ## Tools
 
+### Backend
+
 - Java 21
 - Spring Boot
 - Spring Web
@@ -24,14 +26,35 @@ SpringBook is a personal book management Spring Boot application.
 - Flyway
 - Maven
 
+### Frontend
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+- Lucide React
+- ESLint
+
+### CI
+
+- GitHub Actions
+- Automated Maven build and backend tests
+- PostgreSQL service for repository tests
+
 ## Architecture
 
 The backend is organized by feature, separating responsibilities into entities, repositories, DTOs, and services.
+The frontend is maintained as a separate React application within the same Git repository.
 
 ### Project Structure
 
 ```text
 springbook/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
 ├── src/
 │   └── main/
 │       ├── java/com/springbook/
@@ -47,13 +70,25 @@ springbook/
 │       └── resources/
 │           ├── db/migration/
 │           └── application.properties
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   └── vite.config.ts
+│
 ├── pom.xml
+├── mvnw
+├── mvnw.cmd
+├── .gitignore
 └── README.md
 ```
 
 ## Getting Started
 
-_Prerequisites : Java 21, Maven 3.9+, PostgreSQL_
+_Prerequisites : Java 21, Maven 3.9+, PostgreSQL, Node.js LTS, npm_
 
 Create a PostgreSQL database named `springbook_db`.
 
@@ -75,12 +110,34 @@ To generate the JWT secret in PowerShell:
 ```
 _Note: JWT needs to be at least 32 bytes because it is signed with the HS256 algorithm._
 
-Compile and run the application from the root directory:
+Compile and run the backend from the root directory:
 
 ```bash
 mvn compile
 mvn spring-boot:run
 ```
+
+The backend runs at:
+
+[http://localhost:8080](http://localhost:8080)
+
+Flyway manages database migrations automatically when the application starts.
+
+Open a separate terminal to run the frontend:
+
+```bash
+cd frontend
+npm install
+npm run build
+npm run dev
+```
+
+The frontend development server runs at:
+
+[http://localhost:5173](http://localhost:5173)
+
+_Note: On Windows PowerShell, if npm scripts are blocked by the execution policy, use `npm.cmd` instead of `npm` or run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`._
+_Note: The frontend was created with `npm create vite@latest frontend -- --template react-ts` and configured manually._
 
 ## API Overview
 
@@ -160,7 +217,7 @@ The following values are supported:
 
 _Note: All protected endpoints require authentication; the backend identifies the current user from the JWT._
 
-## Testing
+## Testing the backend
 
 - Service layer tests: JUnit 5 and Mockito.
 - Controller tests: Spring MockMvc.
@@ -172,3 +229,8 @@ Run the tests:
 ```bash
 mvn clean test
 ```
+
+## Continuous Integration
+
+GitHub Actions automatically builds the backend and executes its tests when code is pushed or a pull request is opened.
+The CI workflow is located at `.github/workflows/ci.yml`.

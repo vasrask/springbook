@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Node.js / React
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
