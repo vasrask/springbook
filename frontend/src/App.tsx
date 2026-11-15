@@ -1,37 +1,28 @@
-import { BookOpen, Library, BookMarked } from 'lucide-react'
+import {
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router'
 
-function App() {
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
+import AuthPage from './pages/AuthPage'
+import LibraryPage from './pages/LibraryPage'
+
+export default function App() {
   return (
-    <main className="min-h-screen bg-stone-100 flex items-center justify-center p-8">
-      <div className="max-w-lg w-full rounded-2xl bg-white p-10 shadow-lg">
-        <div className="flex items-center gap-3 mb-6">
-          <BookOpen size={36} className="text-emerald-700" />
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<AuthPage mode="login" />} />
+        <Route path="/register" element={<AuthPage mode="register" />} />
 
-          <h1 className="text-3xl font-bold text-stone-800">
-            SpringBook
-          </h1>
-        </div>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/library" element={<LibraryPage />} />
+        </Route>
 
-        <p className="text-stone-600 mb-8">
-          Your personal reading space.
-        </p>
-
-        <div className="flex gap-4">
-          <Library className="text-emerald-700" />
-          <span className="text-stone-700">
-            Your personal library
-          </span>
-        </div>
-
-        <div className="flex gap-4 mt-4">
-          <BookMarked className="text-emerald-700" />
-          <span className="text-stone-700">
-            Your reading journey
-          </span>
-        </div>
-      </div>
-    </main>
+        <Route path="/" element={<Navigate to="/library" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthProvider>
   )
 }
-
-export default App

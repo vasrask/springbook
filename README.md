@@ -129,6 +129,17 @@ Open a separate terminal to run the frontend:
 cd frontend
 npm install
 npm run build
+```
+
+Create a `.env` file based on `.env.example` for the base URL of the SpringBook API:
+
+```env
+VITE_API_URL=http://localhost:8080/api
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
