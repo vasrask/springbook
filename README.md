@@ -148,6 +148,7 @@ The frontend development server runs at:
 [http://localhost:5173](http://localhost:5173)
 
 _Note: On Windows PowerShell, if npm scripts are blocked by the execution policy, use `npm.cmd` instead of `npm` or run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`._
+
 _Note: The frontend was created with `npm create vite@latest frontend -- --template react-ts` and configured manually._
 
 ## API Overview
